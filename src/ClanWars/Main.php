@@ -79,19 +79,19 @@ class Main extends PluginBase implements Listener {
                         }
                         if ($this->clanAPI->isMember($player->getName(), $clanCalling)) {
                             $player->teleport(new Vector3($coord["clanCalling"]["x"], $coord["clanCalling"]["y"], $coord["clanCalling"]["z"]));
-                            $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "Вы телепортировались на клановую войну");
+                            $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "\nВы телепортировались на клановую войну");
                             $this->listCall[$clanCalling]["state"][$clanPVP] = "fight";
                             $this->playersWar[$clanCalling][] = $player;
                         }
                     }
-                    $this->getServer()->broadcastMessage(TextFormat::GOLD . TextFormat::BOLD . "Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.");
+                    $this->getServer()->broadcastMessage("§6● §e Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.\n");
                 } else {
-                    $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage(TextFormat::GREEN . TextFormat::BOLD . "Ниодного игрока из клана " . $clanCalling . " нет на месте");
+                    $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage("§c● §e Ниодного игрока из клана " . $clanCalling . " нет на месте\n");
                     unset($this->listCall[$clanPVP]["defiant"][$clanCalling]);
                     unset($this->listCall[$clanCalling]["state"][$clanPVP]);
                 }
             } else {
-                $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage(TextFormat::GREEN . TextFormat::BOLD . "Заявка клану " . $clanCalling . " не отправлена, либо вышло время ожидания");
+                $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage("§c● §e Заявка клану " . $clanCalling . " не отправлена, либо вышло время ожидания");
             }
         } else {
             foreach ($this->getServer()->getOnlinePlayers() as $player){
