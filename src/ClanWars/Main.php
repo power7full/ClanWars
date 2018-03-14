@@ -61,7 +61,8 @@ class Main extends PluginBase implements Listener {
                 }
             }
         }
-        $this->api->dMsg($sender, "пизда");
+        $this->api->dMsg($sender, "Заявка отправлена");
+        $this->api->dMsg($this->api->randomPlayer(), "пизда...");
     }
     private function accept($clanCalling, $clanPVP, Config $pos){
         if ($this->employment) {
