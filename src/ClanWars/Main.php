@@ -84,9 +84,9 @@ class Main extends PluginBase implements Listener {
                             $this->playersWar[$clanCalling][] = $player;
                         }
                     }
-                    $this->getServer()->broadcastMessage("§6● §e Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.\n");
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD."§6● §e Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.\n");
                 } else {
-                    $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage("§c● §e Ниодного игрока из клана " . $clanCalling . " нет на месте\n");
+                    $this->getServer()->getPlayer($this->clanAPI->clanInfo($clanPVP)["owner"])->sendMessage("\n§c● §e Ниодного игрока из клана " . $clanCalling . " нет на месте\n");
                     unset($this->listCall[$clanPVP]["defiant"][$clanCalling]);
                     unset($this->listCall[$clanCalling]["state"][$clanPVP]);
                 }
