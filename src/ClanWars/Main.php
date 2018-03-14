@@ -199,13 +199,15 @@ class Main extends PluginBase implements Listener {
                 foreach ($this->playersWar as $value){
                     $clan = $this->clanAPI->getClan($value->getName());
                     $this->getServer()->broadcastMessage(TextFormat::BOLD.TextFormat::GOLD."Победил клан ".TextFormat::GREEN.$this->clanAPI->getClan($value->getName()));
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD.TextFormat::GOLD."Арена свободна");
                     $this->employment = true;
                     unset($this->playersWar);
                     $value->kill();
                 }
                 foreach ($this->getServer()->getOnlinePlayers() as $onlinePlayer){
                     if ($this->clanAPI->isMember($onlinePlayer->getName(), $clan)){
-                        $this->ec->addMoney($onlinePlayer->getName(), 5000);
+                        $this->ec->addMoney($onlinePlayer->getName(), 500);
+                        $this->clanAPI->addPoints($clan, $onlinePlayer->getName(), 10);
                     }
                 }
             }
