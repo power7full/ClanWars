@@ -218,7 +218,6 @@ class Main extends PluginBase implements Listener {
                     }
                 }
                 if (count($this->playersWar[$clan]) == 0){
-                    unset($this->playersWar[$clan]);
                     foreach ($this->playersWar as $clanWin => $playersWin){
                         foreach ($playersWin as $value) {
                             $clan0 = $this->clanAPI->getClan($value->getName());
