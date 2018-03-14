@@ -153,7 +153,7 @@ class Main extends PluginBase implements Listener {
                             $this->api->dMSg($sender, "fight");
                         }
                     } else {
-                        $this->api->dMSg($sender, "nullPointerException");
+                        $this->api->dMsg($sender, "Использование: /call <clanName>");
                     }
                 } else {
                     $this->api->dMSg($sender, "You not owner ".$clanCalling);
@@ -161,35 +161,43 @@ class Main extends PluginBase implements Listener {
                 break;
             case "waraccept":
                 $clanPVP = $clanAPI->getClan($sender->getName());
-                if ($clanAPI->isOwner($sender->getName(), $clanPVP)){
-                    $clanCalling = $clanAPI->getClan($clanAPI->clanInfo($args[0])["owner"]);
-                    if ($this->getDefiantClan($clanCalling, $clanPVP) !== "fight") {
-                        if ($this->getStateCallingClan($clanCalling, $clanPVP) !== "fight") {
-                            $this->accept($clanCalling, $clanPVP, $this->positionConfig);
+                if (isset($args[0])) {
+                    if ($clanAPI->isOwner($sender->getName(), $clanPVP)) {
+                        $clanCalling = $clanAPI->getClan($clanAPI->clanInfo($args[0])["owner"]);
+                        if ($this->getDefiantClan($clanCalling, $clanPVP) !== "fight") {
+                            if ($this->getStateCallingClan($clanCalling, $clanPVP) !== "fight") {
+                                $this->accept($clanCalling, $clanPVP, $this->positionConfig);
+                            }
                         }
+                    } else {
+                        $this->api->dMsg($sender, "Вы не овнер клана");
                     }
                 } else {
-                    $this->api->dMsg($sender, "Вы не овнер клана");
+                    $this->api->dMsg($sender, "Использование: /waraccept <clanName>");
                 }
                 break;
             case "warrefuse":
                 $clanPVP = $clanAPI->getClan($sender->getName());
-                if ($clanAPI->isOwner($sender->getName(), $clanPVP)){
-                    $clanCalling = $args[0];
-                    foreach ($this->getServer()->getOnlinePlayers() as $player){
-                        if ($clanAPI->isOwner($player->getName(), $clanPVP)){
-                            $temp = $player;
+                if (isset($args[0])) {
+                    if ($clanAPI->isOwner($sender->getName(), $clanPVP)) {
+                        $clanCalling = $args[0];
+                        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+                            if ($clanAPI->isOwner($player->getName(), $clanPVP)) {
+                                $temp = $player;
+                            }
+                        }
+                        $ownerCalling = $temp;
+                        $ownerPVP = $this->getServer()->getPlayer($sender->getName());
+                        unset($temp);
+                        if ($this->getDefiantClan($clanCalling, $clanPVP) !== "fight") {
+                            if ($this->getStateCallingClan($clanCalling, $clanPVP) !== "fight") {
+                                $this->refuse($clanCalling, $clanPVP, $ownerCalling, $ownerPVP);
+                            }
+                            $this->delay($this->refuse($clanCalling, $clanPVP, $ownerCalling, $ownerPVP, "p"), 5 * 60);
                         }
                     }
-                    $ownerCalling = $temp;
-                    $ownerPVP = $this->getServer()->getPlayer($sender->getName());
-                    unset($temp);
-                    if ($this->getDefiantClan($clanCalling, $clanPVP) !== "fight") {
-                        if ($this->getStateCallingClan($clanCalling, $clanPVP) !== "fight") {
-                            $this->refuse($clanCalling, $clanPVP, $ownerCalling, $ownerPVP);
-                        }
-                        $this->delay($this->refuse($clanCalling, $clanPVP, $ownerCalling, $ownerPVP, "p"), 5*60);
-                    }
+                } else {
+                    $this->api->dMsg($sender, "Использование: /warrefuse <clanName>");
                 }
                 break;
         }
