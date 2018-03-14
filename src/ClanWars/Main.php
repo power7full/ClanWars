@@ -222,6 +222,7 @@ class Main extends PluginBase implements Listener {
                         foreach ($playersWin as $value) {
                             $clan0 = $this->clanAPI->getClan($value->getName());
                             $this->employment = true;
+                            // Plugin created by power7full
                             unset($this->playersWar);
                             $value->teleport(new Vector3(1985, 64, 2031));
                             $playerWin = $value;
