@@ -4,6 +4,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -20,7 +21,7 @@ use pocketmine\utils\TextFormat;
  */
 
 class Main extends PluginBase implements Listener {
-    public $clanConfig, $positionConfig, $clanAPI, $listCall, $employment = true, $playersWar = [], $clan, $ec, $api;
+    public $clanConfig, $positionConfig, $clanAPI, $listCall, $employment = true, $playersWar = [], $clan, $ec, $api, $death;
     public function onEnable()
     {
         $this->getLogger()->info(TextFormat::GOLD."Plugin ".TextFormat::BLUE."ClanWars enable");
@@ -208,7 +209,9 @@ class Main extends PluginBase implements Listener {
         if (!$this->employment){
             foreach ($this->playersWar as $key => $player) {
                 if ($event->getPlayer()->getName() == $player->getName()) {
+                    $this->death[$key] = $player;
                     unset($this->playersWar[$key]);
+                    $player->teleport(new Vector3(1985, 64, 2031));
                 }
             }
             if (count($this->playersWar) == 1){
@@ -218,13 +221,25 @@ class Main extends PluginBase implements Listener {
                     $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Арена свободна");
                     $this->employment = true;
                     unset($this->playersWar);
-                    $value->kill();
+                    $value->teleport(new Vector3(1985, 64, 2031));
                 }
                 foreach ($this->getServer()->getOnlinePlayers() as $onlinePlayer){
                     if ($this->clanAPI->isMember($onlinePlayer->getName(), $clan)){
                         $this->ec->addMoney($onlinePlayer->getName(), 500);
                         $this->clanAPI->addPoints($clan, $onlinePlayer->getName(), 10);
+                        $this->api->sMsg($onlinePlayer, "Вы получили вознаграждение за победу вы клановой войне");
                     }
+                }
+            }
+        }
+    }
+    public function onRespawn(PlayerRespawnEvent $event){
+        $clan = null;
+        if (!$this->employment){
+            foreach ($this->death as $key => $player) {
+                if ($event->getPlayer()->getName() == $player->getName()) {
+                    unset($this->death[$key]);
+                    $player->teleport(new Vector3(1985, 64, 2031));
                 }
             }
         }
