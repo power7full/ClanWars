@@ -1,0 +1,12 @@
+name: ClanWars
+main: ClanWars\Main
+version: 0.1
+api: 2.0.0
+author: power7full (vk.com/dedic4ted)
+commands:
+  call:
+    description: call
+  waraccept:
+    description: warAccept
+  warrefuse:
+    description: warRefuse
