@@ -75,13 +75,13 @@ class Main extends PluginBase implements Listener {
                             $player->teleport(new Vector3($coord["clanDef"]["x"], $coord["clanDef"]["y"], $coord["clanDef"]["z"]));
                             $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "Вы телепортировались на клановую войну");
                             $this->listCall[$clanPVP]["defiant"][$clanCalling] = "fight";
-                            $this->playersWar[] = $player;
+                            $this->playersWar[$clanPVP][] = $player;
                         }
                         if ($this->clanAPI->isMember($player->getName(), $clanCalling)) {
                             $player->teleport(new Vector3($coord["clanCalling"]["x"], $coord["clanCalling"]["y"], $coord["clanCalling"]["z"]));
                             $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "Вы телепортировались на клановую войну");
                             $this->listCall[$clanCalling]["state"][$clanPVP] = "fight";
-                            $this->playersWar[] = $player;
+                            $this->playersWar[$clanCalling][] = $player;
                         }
                     }
                     $this->getServer()->broadcastMessage(TextFormat::GOLD . TextFormat::BOLD . "Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.");
@@ -204,13 +204,38 @@ class Main extends PluginBase implements Listener {
     }
 
     public function onDeath(PlayerDeathEvent $event){
-        $clan = null;
+        $clan0 = null;
+        $playerWin = null;
         if (!$this->employment){
-            foreach ($this->playersWar as $key => $player) {
-                if ($event->getPlayer()->getName() == $player->getName()) {
-                    $this->death[$key] = $player;
-                    unset($this->playersWar[$key]);
-                    $player->teleport(new Vector3(1985, 64, 2031));
+
+            foreach ($this->playersWar as $clan => $players) {
+                foreach ($players as $key => $player) {
+                    if ($event->getPlayer()->getName() == $player->getName()) {
+                        $this->death[$key] = $player;
+                        unset($this->playersWar[$clan][$key]);
+                        $player->teleport(new Vector3(1985, 64, 2031));
+                    }
+                }
+                if (count($this->playersWar[$clan]) == 0){
+                    unset($this->playersWar[$clan]);
+                    foreach ($this->playersWar as $clanWin => $playersWin){
+                        foreach ($playersWin as $value) {
+                            $clan0 = $this->clanAPI->getClan($value->getName());
+                            $this->employment = true;
+                            unset($this->playersWar);
+                            $value->teleport(new Vector3(1985, 64, 2031));
+                            $playerWin = $value;
+                        }
+                    }
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD . "§a● §e Победил клан " . TextFormat::GREEN . $this->clanAPI->getClan($playerWin->getName()));
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD . "§a● §e Арена свободна");
+                    foreach ($this->getServer()->getOnlinePlayers() as $onlinePlayer){
+                        if ($this->clanAPI->isMember($onlinePlayer->getName(), $clan0)){
+                            $this->ec->addMoney($onlinePlayer->getName(), 500);
+                            $this->clanAPI->addPoints($clan, $onlinePlayer->getName(), 10);
+                            $this->api->sMsg($onlinePlayer, "Вы получили вознаграждение за победу вы клановой войне");
+                        }
+                    }
                 }
             }
             if (count($this->playersWar) == 1){
