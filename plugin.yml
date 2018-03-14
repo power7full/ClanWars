@@ -1,6 +1,6 @@
 name: ClanWars
 main: ClanWars\Main
-version: 0.1
+version: 1.0_REALESE
 api: 2.0.0
 author: power7full (vk.com/dedic4ted)
 commands:
