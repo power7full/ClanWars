@@ -37,7 +37,7 @@ class Main extends PluginBase implements Listener {
             $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Telegram - t.me/rofling ");
             $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Github - github.com/power7full ");
             $this->getServer()->broadcastMessage("\n");
-        }, 60*10*100);
+        }, 60*10*10);
         $this->repeat(function (){
             $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Покупайте донат здесь: shop.neocraft-pe.ru");
             $this->warningFunc();
@@ -120,10 +120,18 @@ class Main extends PluginBase implements Listener {
         }
     }
     private function getStateCallingClan($clanCalling, $clanPVP){
-        return $this->listCall[$clanCalling]["state"][$clanPVP];
+        if (isset($clanPVP) && isset($clanPVP)) {
+            return $this->listCall[$clanCalling]["state"][$clanPVP];
+        } else {
+            return false;
+        }
     }
     private function getDefiantClan($clanCalling, $clanPVP){
-        return $this->listCall[$clanPVP]["defiant"][$clanCalling];
+        if (isset($clanPVP) && isset($clanPVP)) {
+            return $this->listCall[$clanPVP]["defiant"][$clanCalling];
+        } else {
+            return false;
+        }
     }
     public function onCommand(CommandSender $sender, Command $command, $label, array $args)
     {
@@ -198,8 +206,8 @@ class Main extends PluginBase implements Listener {
             if (count($this->playersWar) == 1){
                 foreach ($this->playersWar as $value){
                     $clan = $this->clanAPI->getClan($value->getName());
-                    $this->getServer()->broadcastMessage(TextFormat::BOLD.TextFormat::GOLD."Победил клан ".TextFormat::GREEN.$this->clanAPI->getClan($value->getName()));
-                    $this->getServer()->broadcastMessage(TextFormat::BOLD.TextFormat::GOLD."Арена свободна");
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Победил клан ".TextFormat::GREEN.$this->clanAPI->getClan($value->getName()));
+                    $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Арена свободна");
                     $this->employment = true;
                     unset($this->playersWar);
                     $value->kill();
