@@ -35,8 +35,7 @@ class Main extends PluginBase implements Listener {
         $this->repeat(function (){
             $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e ClanWars created by power7full");
             $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Contacts: ");
-            $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Telegram - t.me/rofling ");
-            $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Github - github.com/power7full ");
+            $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e   Telegram - t.me/rofling ");
             $this->getServer()->broadcastMessage("\n");
         }, 60*10*10);
         $this->repeat(function (){
