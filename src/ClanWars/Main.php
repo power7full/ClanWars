@@ -238,23 +238,6 @@ class Main extends PluginBase implements Listener {
                     }
                 }
             }
-            if (count($this->playersWar) == 1){
-                foreach ($this->playersWar as $value){
-                    $clan = $this->clanAPI->getClan($value->getName());
-                    $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Победил клан ".TextFormat::GREEN.$this->clanAPI->getClan($value->getName()));
-                    $this->getServer()->broadcastMessage(TextFormat::BOLD."§a● §e Арена свободна");
-                    $this->employment = true;
-                    unset($this->playersWar);
-                    $value->teleport(new Vector3(1985, 64, 2031));
-                }
-                foreach ($this->getServer()->getOnlinePlayers() as $onlinePlayer){
-                    if ($this->clanAPI->isMember($onlinePlayer->getName(), $clan)){
-                        $this->ec->addMoney($onlinePlayer->getName(), 500);
-                        $this->clanAPI->addPoints($clan, $onlinePlayer->getName(), 10);
-                        $this->api->sMsg($onlinePlayer, "Вы получили вознаграждение за победу вы клановой войне");
-                    }
-                }
-            }
         }
     }
     public function onRespawn(PlayerRespawnEvent $event){
