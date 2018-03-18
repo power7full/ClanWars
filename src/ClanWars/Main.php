@@ -76,6 +76,7 @@ class Main extends PluginBase implements Listener {
                             $player->teleport(new Vector3($coord["clanDef"]["x"], $coord["clanDef"]["y"], $coord["clanDef"]["z"]));
                             $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "Вы телепортировались на клановую войну");
                             $this->listCall[$clanPVP]["defiant"][$clanCalling] = "fight";
+                            $player->setGamemode(0);
                             $this->playersWar[$clanPVP][] = $player;
                         }
                         if ($this->clanAPI->isMember($player->getName(), $clanCalling)) {
@@ -83,6 +84,7 @@ class Main extends PluginBase implements Listener {
                             $player->sendMessage(TextFormat::BOLD . TextFormat::GOLD . "\nВы телепортировались на клановую войну");
                             $this->listCall[$clanCalling]["state"][$clanPVP] = "fight";
                             $this->playersWar[$clanCalling][] = $player;
+                            $player->setGamemode(0);
                         }
                     }
                     $this->getServer()->broadcastMessage(TextFormat::BOLD."§6● §e Кланы " . $clanCalling . " и " . $clanPVP . " начали войну. Арена занята.\n");
@@ -122,14 +124,22 @@ class Main extends PluginBase implements Listener {
     }
     private function getStateCallingClan($clanCalling, $clanPVP){
         if (isset($clanPVP) && isset($clanPVP)) {
-            return $this->listCall[$clanCalling]["state"][$clanPVP];
+            if (isset($this->listCall[$clanCalling]["state"][$clanPVP])){
+                return $this->listCall[$clanCalling]["state"][$clanPVP];
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
     }
     private function getDefiantClan($clanCalling, $clanPVP){
         if (isset($clanPVP) && isset($clanPVP)) {
-            return $this->listCall[$clanPVP]["defiant"][$clanCalling];
+            if (isset($this->listCall[$clanPVP]["defiant"][$clanCalling])){
+                return $this->listCall[$clanPVP]["defiant"][$clanCalling];
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
