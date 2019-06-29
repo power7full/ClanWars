@@ -7,4 +7,4 @@ This plugin was created to organize **clan battles**
 * `/warrefuse <the name of the clan that called you>` - the rejection of the call
 
 
-Created by **power7full**
+Created by **sschz**
